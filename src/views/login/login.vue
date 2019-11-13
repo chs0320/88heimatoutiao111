@@ -14,9 +14,15 @@
            <el-form-item>
               <el-input style="width:280px"></el-input>
                <!-- 提交按钮  float:right  什么东西-->
-               <el-button plain style="float:right">发送验证码</el-button>
-               <el-checkedbox></el-checkedbox>
+               <el-button style="float:right" plain>发送验证码</el-button>
            </el-form-item>
+            <el-from-item>
+                  <!-- 勾选同意框 -->
+            <el-checkbox style="margin-bottom:40px">我已阅读并同意用户协议及条款</el-checkbox>
+            </el-from-item>
+            <el-from-item>
+               <el-button style="width:100%" type='primary'>登录</el-button>
+            </el-from-item>
         </el-form>
      </el-card>
   </div>
@@ -40,6 +46,7 @@ export default {
       .login-card {
          width: 440px;
          height: 360px;
+         opacity: 0.7;
          .title {
             text-align: center;
             img {
