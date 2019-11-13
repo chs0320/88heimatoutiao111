@@ -7,7 +7,7 @@
            <img src="../../assets/img/logo_index.png" alt="">
         </div>
         <!-- 表单 -->
-        <el-form :model="loginForm" :rules="loginRules">
+        <el-form ref="formObj" :model="loginForm" :rules="loginRules">
            <el-form-item prop="mobile">
               <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
            </el-form-item>
@@ -21,7 +21,7 @@
             <el-checkbox v-model="loginForm.checked" style="margin-bottom:40px">我已阅读并同意用户协议及条款</el-checkbox>
             </el-form-item>
             <el-form-item>
-               <el-button style="width:100%" type='primary'>登录</el-button>
+               <el-button style="width:100%" type='primary' @click="cc">登录</el-button>
             </el-form-item>
         </el-form>
      </el-card>
@@ -56,6 +56,12 @@ export default {
           }
         } }]
       }
+    }
+  },
+  methods: {
+    cc () {
+      // this.$refs.formObj    获取el-form的dom对象实例
+      this.$refs.formObj.validate()
     }
   }
 }
