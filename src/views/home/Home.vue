@@ -29,7 +29,9 @@
     <!-- 右边大容器 -->
     <el-container>
       <!-- 上边 -->
-      <el-header>头部</el-header>
+      <el-header>
+        <layout-header></layout-header>
+      </el-header>
       <!-- 底下 -->
       <el-main>
         <!-- 二级路由容器 -->
@@ -41,10 +43,12 @@
 
 <script>
 // @ is an alias to /src
-
+import layoutHeader from '../../components/layout-header.vue'
 export default {
   name: 'home',
-  components: {}
+  components: {
+    'layout-header': layoutHeader
+  }
 }
 </script>
 <style lang="less" scoped>
