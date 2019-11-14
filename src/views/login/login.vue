@@ -46,7 +46,7 @@ export default {
           pattern: /^\d{6}$/, message: '请输入六位数字'
         }],
         checked: [{ validator: function (rule, value, callback) {
-          //   rule代表当前的规则
+          //   rule代表当前的规则   没啥用
           // value代表当前的值   表单字段checked的值
           //  callback回调函数   是用来执行的
           if (value) {
@@ -61,9 +61,20 @@ export default {
   methods: {
     cc () {
       // this.$refs.formObj    获取el-form的dom对象实例
-      this.$refs.formObj.validate(function (isOK) {
+      this.$refs.formObj.validate((isOK) => {
         if (isOK) {
           // 如果为true的话直接继续下一步  调用接口   登录
+          // 调用接口
+          this.$axios({
+            url: '/authorizations',
+            data: this.loginForm,
+            // 请求类型
+            method: 'post'
+          }).then(res => {
+            // console.log(res.data.data.token)
+            // 存到本地   将信息存到本地
+            window.localStorage.setItem('user-token', res.data.data.token)
+          })
         }
       })
     }
