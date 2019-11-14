@@ -61,7 +61,11 @@ export default {
   methods: {
     cc () {
       // this.$refs.formObj    获取el-form的dom对象实例
-      this.$refs.formObj.validate()
+      this.$refs.formObj.validate(function (isOK) {
+        if (isOK) {
+          // 如果为true的话直接继续下一步  调用接口   登录
+        }
+      })
     }
   }
 }
