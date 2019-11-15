@@ -1,6 +1,6 @@
 <template>
   <div class="name">
-     nishisei
+     内容列表
   </div>
 </template>
 

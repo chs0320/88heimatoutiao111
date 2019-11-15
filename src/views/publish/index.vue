@@ -1,6 +1,6 @@
 <template>
   <div>
-     shads
+     发布文章
   </div>
 </template>
 
