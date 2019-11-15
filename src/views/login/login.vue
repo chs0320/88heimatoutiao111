@@ -76,7 +76,7 @@ export default {
             window.localStorage.setItem('user-token', res.data.data.token)
             // 跳转到主页
             // 编程式导航
-            this.$router.push('/home')
+            this.$router.push('/')
           }).catch((Err) => {
             // 提示登录失败
             this.$message({
