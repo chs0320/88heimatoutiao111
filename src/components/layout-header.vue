@@ -13,7 +13,7 @@
       <!-- 右侧 -->
       <img src="../assets/img/avatar.jpg" alt="">
       <el-dropdown trigger="click">
-         <span>早晚</span>
+         <span style="cursor: pointer;">早晚</span>
          <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>个人信息</el-dropdown-item>
             <el-dropdown-item>git地址</el-dropdown-item>
