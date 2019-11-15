@@ -68,6 +68,7 @@ router.beforeEach((to, from, next) => {
     next() //  通过
   } else {
     next('/login') // 跳转到指定路由
+    nprogress.done()
   }
 })
 // 路由导航结束触发的钩子函数
