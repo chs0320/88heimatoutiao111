@@ -45,38 +45,45 @@
       <div slot="header" class="clearfix">
         <span>共找到59806条符合条件的内容</span>
       </div>
-        <el-table
-      :data="tableData"
-      style="width: 100%">
-      <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="发布日期">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="操作">
-      </el-table-column>
-    </el-table>
+      <el-table :data="articles" style="width: 100%">
+        <el-table-column prop="date" label="日期" width="180">
+          <template slot-scope="scope">
+            <img width="50px" :src="scope.row.cover.images[0]" alt />
+          </template>
+        </el-table-column>
+        <el-table-column prop="title" label="姓名" width="180"></el-table-column>
+        <el-table-column prop="address" label="状态">
+          <template slot-scope="scope">
+            <!-- 简单方法 -->
+            <!-- <span v-show="scope.row.status===0">草稿</span>
+          <span v-show="scope.row.status===1">待审核</span>
+          <span v-show="scope.row.status===2">审核失败</span>
+          <span v-show="scope.row.status===3">审核成功</span>
+            <span v-show="scope.row.status===4">已删除</span>-->
+            <!-- 定义数组的方法 -->
+            <!-- <span>{{articleStatus[scope.row.status].label}}</span> -->
+            <!-- 引入标签的方法 -->
+            <el-tag
+              :type="articleStatus[scope.row.status].type"
+            >{{articleStatus[scope.row.status].label}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="pubdate" label="发布日期"></el-table-column>
+        <el-table-column prop="address" label="操作">
+          <template>
+            <el-button type="primary" round size="mini">编辑</el-button>
+            <el-button type="danger" round size="mini">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-card>
   </div>
 </template>
 
 <script>
 export default {
+  // 建议给每个数组都起一个名字，有利于在网页的vue查找   建议有意义
+  name: 'cc',
   data () {
     return {
       filterForm: {
@@ -87,39 +94,77 @@ export default {
       },
       // 因为时间现在只能绑一个，所以(必须)就创建了一个新的
       rangDate: '',
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      tableData: [
+        {
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        },
+        {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        },
+        {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }
+      ],
+      // 因为打印出来的是一个数组，所以先定义一个空数组   文章数据库列表
+      articles: [],
+      articleStatus: [
+        {
+          type: 'info',
+          label: '草稿'
+        },
+        {
+          type: '',
+          label: '待审核'
+        },
+        {
+          type: 'warning',
+          label: '审核失败'
+        },
+        {
+          type: 'success',
+          label: '审核成功'
+        },
+        {
+          type: 'danger',
+          label: '已删除'
+        }
+      ]
     }
   },
   created () {
-    const token = window.localStorage.getItem('user-token')
-    this.$axios({
-      method: 'get',
-      url: '/articles',
-      headers: {
-        // 添加请求头
-        Authorization: `Bearer ${token}`
-      }
-    }).then(res => {
-      console.log(res)
-    }).catch(err => {
-      console.log(err, '请求失败')
-    })
+    // 建议不在这个里面写大量逻辑，所以就写在方法里，封装一个函数
+    this.loadArticles()
+  },
+  methods: {
+    loadArticles () {
+      const token = window.localStorage.getItem('user-token')
+      this.$axios({
+        method: 'get',
+        url: '/articles',
+        headers: {
+          // 添加请求头
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then(res => {
+          // console.log(res)
+          this.articles = res.data.data.results
+        })
+        .catch(err => {
+          console.log(err, '请求失败')
+        })
+    }
   }
 }
 </script>
