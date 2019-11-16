@@ -64,7 +64,7 @@ export default {
 <style lang="less" scoped>
 .left {
   width: 220px;
-  height: 100vh;
+  // height: 100vh;
   background-color: #353b4e;
   overflow: hidden;
   .menu-title {

@@ -43,7 +43,7 @@
     </el-card>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>共找到59806条符合条件的内容</span>
+        <span>共找到{{totalCount}}条符合条件的内容</span>
       </div>
       <el-table :data="articles" style="width: 100%">
         <el-table-column prop="date" label="日期" width="180">
@@ -77,6 +77,7 @@
         </el-table-column>
       </el-table>
     </el-card>
+    <el-pagination style="margin-left:280px;margin-top:60px" @current-change="onPageChange" background layout="prev, pager, next" :total="totalCount"></el-pagination>
   </div>
 </template>
 
@@ -116,7 +117,7 @@ export default {
           address: '上海市普陀区金沙江路 1516 弄'
         }
       ],
-      // 因为打印出来的是一个数组，所以先定义一个空数组   文章数据库列表
+      // 因为打印出来的是一个数组，所以先定义一个空数组   存储文章数据库列表
       articles: [],
       articleStatus: [
         {
@@ -139,7 +140,9 @@ export default {
           type: 'danger',
           label: '已删除'
         }
-      ]
+      ],
+      totalCount: 0,
+      loding: true
     }
   },
   created () {
@@ -147,7 +150,7 @@ export default {
     this.loadArticles()
   },
   methods: {
-    loadArticles () {
+    loadArticles (page = 1) {
       const token = window.localStorage.getItem('user-token')
       this.$axios({
         method: 'get',
@@ -155,15 +158,23 @@ export default {
         headers: {
           // 添加请求头
           Authorization: `Bearer ${token}`
+        },
+        params: {
+          page,
+          per_page: 10
         }
       })
         .then(res => {
           // console.log(res)
           this.articles = res.data.data.results
+          this.totalCount = res.data.data.total_count
         })
         .catch(err => {
           console.log(err, '请求失败')
         })
+    },
+    onPageChange (page) {
+      this.loadArticles(page)
     }
   }
 }
