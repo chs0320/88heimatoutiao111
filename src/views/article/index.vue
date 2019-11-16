@@ -45,8 +45,8 @@
       <div slot="header" class="clearfix">
         <span>共找到{{totalCount}}条符合条件的内容</span>
       </div>
-      <el-table :data="articles" style="width: 100%">
-        <el-table-column prop="date" label="日期" width="180">
+      <el-table :data="articles" style="width: 100%" v-loading="loading">
+        <el-table-column prop="date" label="日期" width="180" >
           <template slot-scope="scope">
             <img width="50px" :src="scope.row.cover.images[0]" alt />
           </template>
@@ -77,7 +77,7 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <el-pagination style="margin-left:280px;margin-top:60px" @current-change="onPageChange" background layout="prev, pager, next" :total="totalCount"></el-pagination>
+    <el-pagination :disabled="loading" style="margin-left:280px;margin-top:60px" @current-change="onPageChange" background layout="prev, pager, next" :total="totalCount"></el-pagination>
   </div>
 </template>
 
@@ -142,7 +142,8 @@ export default {
         }
       ],
       totalCount: 0,
-      loding: true
+      loading: true,
+      page: 0 // 存储当前页码
     }
   },
   created () {
@@ -151,6 +152,9 @@ export default {
   },
   methods: {
     loadArticles (page = 1) {
+      // 加载loading
+      this.loading = true
+      // 加载所有文章数据
       const token = window.localStorage.getItem('user-token')
       this.$axios({
         method: 'get',
@@ -171,11 +175,24 @@ export default {
         })
         .catch(err => {
           console.log(err, '请求失败')
+        }).finally(() => {
+          this.loading = false
         })
     },
     onPageChange (page) {
+      // 发请求接收对应页码数据
       this.loadArticles(page)
+
+      // 把最新页码更新到 data 中
+      // this.page = page
     }
+
+    // onDelete () {
+    //   // 请求删除
+    //   // 删除成功，重载当前页数据
+    //   this.loadArticles(this.page)
+    //   // 思路：所有方法都可以访问 this，共享 Vue 实例
+    // }
   }
 }
 </script>
