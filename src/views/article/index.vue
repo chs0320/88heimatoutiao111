@@ -18,12 +18,12 @@
         </el-form-item>
         <el-form-item label="查询状态">
           <el-select placeholder="请选择" v-model="filterForm.channel_id">
-            <el-option label="全部" value="shanghai"></el-option>
-            <el-option label="草稿" value="beijing"></el-option>
-            <el-option label="待审核" value="beijing"></el-option>
-            <el-option label="审核通过" value="beijing"></el-option>
-            <el-option label="审核失败" value="beijing"></el-option>
-            <el-option label="已删除" value="beijing"></el-option>
+            <el-option
+              :label="channel.name"
+              :value="channel.id"
+              v-for="channel in channels"
+              :key="channel.id"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="时间选择">
@@ -49,7 +49,7 @@
         <span>共找到{{totalCount}}条符合条件的内容</span>
       </div>
       <el-table :data="articles" style="width: 100%" v-loading="loading">
-        <el-table-column prop="date" label="日期" width="180" >
+        <el-table-column prop="date" label="日期" width="180">
           <template slot-scope="scope">
             <img width="50px" :src="scope.row.cover.images[0]" alt />
           </template>
@@ -80,7 +80,14 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <el-pagination :disabled="loading" style="margin-left:280px;margin-top:60px" @current-change="onPageChange" background layout="prev, pager, next" :total="totalCount"></el-pagination>
+    <el-pagination
+      :disabled="loading"
+      style="margin-left:280px;margin-top:60px"
+      @current-change="onPageChange"
+      background
+      layout="prev, pager, next"
+      :total="totalCount"
+    ></el-pagination>
   </div>
 </template>
 
@@ -92,9 +99,10 @@ export default {
     return {
       filterForm: {
         status: null,
-        channel_id: '',
+        channel_id: null,
         begin_pubdate: '',
         end_pubdate: ''
+
       },
       // 因为时间现在只能绑一个，所以(必须)就创建了一个新的
       rangDate: '',
@@ -147,12 +155,15 @@ export default {
       ],
       totalCount: 0,
       loading: true,
-      page: 0 // 存储当前页码
+      page: 0, // 存储当前页码
+      channels: []
     }
   },
   created () {
     // 建议不在这个里面写大量逻辑，所以就写在方法里，封装一个函数
     this.loadArticles()
+    // 加载频道列表
+    this.loadChannels()
   },
   methods: {
     loadArticles (page = 1) {
@@ -170,8 +181,8 @@ export default {
         params: {
           page,
           per_page: 10,
-          status: this.filterForm.status // 文章状态
-          // channel_id, // 频道id
+          status: this.filterForm.status, // 文章状态
+          channel_id: this.filterForm.channel_id // 频道id
           // begin_pubdate, //   开始时间
           // end_pubdate //  结束时间
         }
@@ -183,7 +194,8 @@ export default {
         })
         .catch(err => {
           console.log(err, '请求失败')
-        }).finally(() => {
+        })
+        .finally(() => {
           // 这个函数无论成功或者失败都会执行、在写loading的时候必须得写
           this.loading = false
         })
@@ -194,6 +206,20 @@ export default {
 
       // 把最新页码更新到 data 中
       // this.page = page
+    },
+    loadChannels () {
+      // 请求频道接口
+      this.$axios({
+        method: 'get',
+        url: '/channels'
+      })
+        .then(res => {
+          // console.log(res)
+          this.channels = res.data.data.channels
+        })
+        .catch(err => {
+          console.log(err, '获取数据失败')
+        })
     }
 
     // onDelete () {
