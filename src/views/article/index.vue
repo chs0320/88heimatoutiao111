@@ -17,7 +17,10 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="查询状态">
+          <!-- 下拉列表会把选中的option的value值传到数据中 -->
           <el-select placeholder="请选择" v-model="filterForm.channel_id">
+            <el-option label="所有频道" :value="null"></el-option>
+            <!-- value="null"  故意的  不传就是所有  默认的 -->
             <el-option
               :label="channel.name"
               :value="channel.id"
@@ -102,7 +105,6 @@ export default {
         channel_id: null,
         begin_pubdate: '',
         end_pubdate: ''
-
       },
       // 因为时间现在只能绑一个，所以(必须)就创建了一个新的
       rangDate: '',
