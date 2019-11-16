@@ -38,6 +38,7 @@
               range-separator="-"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              value-format="yyyy-MM-dd"
             ></el-date-picker>
           </div>
         </el-form-item>
@@ -102,12 +103,12 @@ export default {
     return {
       filterForm: {
         status: null,
-        channel_id: null,
-        begin_pubdate: '',
-        end_pubdate: ''
+        channel_id: null
+        // begin_pubdate: '',
+        // end_pubdate: ''
       },
       // 因为时间现在只能绑一个，所以(必须)就创建了一个新的
-      rangDate: '',
+      rangDate: [],
       tableData: [
         {
           date: '2016-05-02',
@@ -158,7 +159,8 @@ export default {
       totalCount: 0,
       loading: true,
       page: 0, // 存储当前页码
-      channels: []
+      channels: [],
+      rangeDate: []
     }
   },
   created () {
@@ -184,9 +186,11 @@ export default {
           page,
           per_page: 10,
           status: this.filterForm.status, // 文章状态
-          channel_id: this.filterForm.channel_id // 频道id
+          channel_id: this.filterForm.channel_id, // 频道id
           // begin_pubdate, //   开始时间
           // end_pubdate //  结束时间
+          begin_pubdate: this.rangDate ? this.rangDate[0] : null,
+          end_pubdate: this.rangDate ? this.rangDate[1] : null
         }
       })
         .then(res => {
