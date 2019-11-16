@@ -8,11 +8,12 @@
         <!-- 文章状态 -->
         <el-form-item label="文章状态">
           <el-radio-group v-model="filterForm.status">
-            <el-radio label="全部"></el-radio>
-            <el-radio label="草稿"></el-radio>
-            <el-radio label="待审核"></el-radio>
-            <el-radio label="审核通过"></el-radio>
-            <el-radio label="审核失败"></el-radio>
+            <el-radio :label="null">全部</el-radio>
+            <el-radio label="0">草稿</el-radio>
+            <el-radio label="1">待审核</el-radio>
+            <el-radio label="2">审核通过</el-radio>
+            <el-radio label="3">审核失败</el-radio>
+            <el-radio label="4">已删除</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="查询状态">
@@ -22,6 +23,7 @@
             <el-option label="待审核" value="beijing"></el-option>
             <el-option label="审核通过" value="beijing"></el-option>
             <el-option label="审核失败" value="beijing"></el-option>
+            <el-option label="已删除" value="beijing"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="时间选择">
@@ -37,7 +39,8 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
+          <!-- 后面加括号默认从第一页开始查 -->
+          <el-button type="primary" @click="loadArticles(1)">查询</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -88,7 +91,7 @@ export default {
   data () {
     return {
       filterForm: {
-        status: '',
+        status: null,
         channel_id: '',
         begin_pubdate: '',
         end_pubdate: ''
@@ -128,13 +131,14 @@ export default {
           type: '',
           label: '待审核'
         },
-        {
-          type: 'warning',
-          label: '审核失败'
-        },
+
         {
           type: 'success',
           label: '审核成功'
+        },
+        {
+          type: 'warning',
+          label: '审核失败'
         },
         {
           type: 'danger',
@@ -165,7 +169,11 @@ export default {
         },
         params: {
           page,
-          per_page: 10
+          per_page: 10,
+          status: this.filterForm.status // 文章状态
+          // channel_id, // 频道id
+          // begin_pubdate, //   开始时间
+          // end_pubdate //  结束时间
         }
       })
         .then(res => {
@@ -176,6 +184,7 @@ export default {
         .catch(err => {
           console.log(err, '请求失败')
         }).finally(() => {
+          // 这个函数无论成功或者失败都会执行、在写loading的时候必须得写
           this.loading = false
         })
     },
