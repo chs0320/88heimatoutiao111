@@ -77,13 +77,15 @@
         </el-table-column>
         <el-table-column prop="pubdate" label="发布日期"></el-table-column>
         <el-table-column prop="address" label="操作">
-          <template>
+          <!-- slot-scope="scope"相当于v-for  后面传id就是通过每项的id删除 -->
+          <template slot-scope="scope">
             <el-button type="primary" round size="mini">编辑</el-button>
-            <el-button type="danger" round size="mini">删除</el-button>
+            <el-button type="danger" round size="mini" @click="onDelete(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
+          <!--current-change 这是组件给我们的 我们需要在删除之后重载当前页码的文章列表，所以需要把页码记录起来-->
     <el-pagination
       :disabled="loading"
       style="margin-left:280px;margin-top:60px"
@@ -158,7 +160,7 @@ export default {
       ],
       totalCount: 0,
       loading: true,
-      page: 0, // 存储当前页码
+      page: 0, // 在data中添加数据成员存储当前页码
       channels: [],
       rangeDate: []
     }
@@ -209,9 +211,26 @@ export default {
     onPageChange (page) {
       // 发请求接收对应页码数据
       this.loadArticles(page)
-
       // 把最新页码更新到 data 中
-      // this.page = page
+      this.page = page
+    },
+    // 在处理函数中请求删除文章，删除成功，重载当前页文章列表
+    onDelete (articleId) {
+      // 调接口
+      this.$axios({
+        method: 'DELETE',
+        // 任何数据和字符串相加都会tostring
+        url: `/articles/${articleId}`,
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        }
+      }).then(res => {
+        console.log(res)
+        // 当删除成功的时候重新加载数据列表  删除那一页哪一页刷新
+        this.loadArticles(this.page)
+      }).catch(err => {
+        console.log(err, '删除失败')
+      })
     },
     loadChannels () {
       // 请求频道接口

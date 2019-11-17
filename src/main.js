@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css' // 引入样式
 import './styles/index.less'
 import axios from 'axios'
 import '../node_modules/nprogress/nprogress.css'
+import JSONbig from 'json-bigint'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 Vue.prototype.$axios = axios // 将axios共享给所有的实例使用    prototype原型属性     vue所有的属性都带$
 Vue.use(ElementUI) // 注册所有的组件，就用vue.use
@@ -15,3 +16,13 @@ new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
+// 这个不能用箭头函数吧
+axios.defaults.transformResponse = [function (data, headers) {
+  try {
+    return JSONbig.parse(data)
+  } catch (err) {
+    // try里面的代码一旦发生异常就执行catch里面的代码
+    console.log(err)
+    return {}
+  }
+}]
