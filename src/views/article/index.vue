@@ -160,7 +160,7 @@ export default {
       ],
       totalCount: 0,
       loading: true,
-      page: 0, // 在data中添加数据成员存储当前页码
+      page: 1, // 在data中添加数据成员存储当前页码
       channels: [],
       rangeDate: []
     }
@@ -237,11 +237,10 @@ export default {
       this.$axios({
         method: 'get',
         url: '/channels'
+      }).then(res => {
+        // console.log(res)
+        this.channels = res.data.data.channels
       })
-        .then(res => {
-          // console.log(res)
-          this.channels = res.data.data.channels
-        })
         .catch(err => {
           console.log(err, '获取数据失败')
         })

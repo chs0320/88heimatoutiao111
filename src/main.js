@@ -19,6 +19,7 @@ new Vue({
 // 这个不能用箭头函数吧
 axios.defaults.transformResponse = [function (data, headers) {
   try {
+    // this.loadArticles(this.page)
     return JSONbig.parse(data)
   } catch (err) {
     // try里面的代码一旦发生异常就执行catch里面的代码
