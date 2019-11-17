@@ -9,7 +9,9 @@
           <el-input v-model="article.title"></el-input>
         </el-form-item>
         <el-form-item label="内容">
-          <el-input type="textarea" v-model="article.content"></el-input>
+          <!-- <el-input type="textarea" v-model="article.content"></el-input> -->
+          <quill-editor v-model="article.content">
+          </quill-editor>
         </el-form-item>
         <el-form-item label="频道">
           <el-select v-model="article.channel_id" placeholder="请选择频道">
@@ -37,8 +39,15 @@
 </template>
 
 <script>
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import { quillEditor } from 'vue-quill-editor'
 export default {
   name: 'PublishArticle',
+  components: {
+    quillEditor
+  },
   data () {
     return {
       article: {
@@ -50,7 +59,8 @@ export default {
         },
         channel_id: ''
       },
-      channels: []
+      channels: [],
+      editorOption: ''
     }
   },
   // 生命周期第二步先加载这里边写的内容  然后在加载其他的
