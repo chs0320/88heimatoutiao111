@@ -216,6 +216,7 @@ export default {
         })
     },
     onPageChange (page) {
+      console.log(page)
       // 发请求接收对应页码数据
       this.loadArticles(page)
       // 把最新页码更新到 data 中

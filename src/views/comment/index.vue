@@ -41,6 +41,13 @@
         </el-table-column>
       </el-table>
     </el-card>
+ <el-pagination
+ style="margin-left:280px;margin-top:60px"
+ @current-change="onPageChange"
+  background
+  layout="prev, pager, next"
+  :total="totalCount">
+</el-pagination>
   </div>
 </template>
 
@@ -53,7 +60,10 @@ export default {
   props: {},
   data () {
     return {
-      articles: []
+      articles: [],
+      totalCount: 0,
+
+      page: 1
     }
   },
   computed: {},
@@ -63,16 +73,19 @@ export default {
     this.loadArticles()
   },
   methods: {
-    loadArticles () {
+    loadArticles (page) {
       this.$axios({
         method: 'GET',
         url: '/articles',
         params: {
-          response_type: 'comment'
+          response_type: 'comment',
+          page,
+          per_page: 10
         }
       }).then(res => {
         console.log(res)
         this.articles = res.data.data.results
+        this.totalCount = res.data.data.total_count
       }).catch(err => {
         console.log(err, '获取数据失败')
       })
@@ -96,6 +109,12 @@ export default {
         console.log(err)
         this.$message.error('操作失败')
       })
+    },
+    onPageChange (page) {
+      // 发请求接收对应页码数据
+      this.loadArticles(page)
+      // 把最新页码更新到 data 中
+      this.page = page
     }
   }
 }
