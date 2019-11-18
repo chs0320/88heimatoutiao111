@@ -14,14 +14,15 @@
           </quill-editor>
         </el-form-item>
         <el-form-item label="频道">
-          <el-select v-model="article.channel_id" placeholder="请选择频道">
+          <!-- <el-select v-model="article.channel_id" placeholder="请选择频道">
              <el-option
               :label="channel.name"
               :value="channel.id"
               v-for="channel in channels"
               :key="channel.id"
             ></el-option>
-          </el-select>
+          </el-select> -->
+            <channel-select v-model="article.channel_id"></channel-select>
         </el-form-item>
         <!-- <el-form-item label="封面">
           <el-radio-group v-model="form.resource">
@@ -43,10 +44,13 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import { quillEditor } from 'vue-quill-editor'
+import channelSelect from '@/components/channel-select'
 export default {
   name: 'PublishArticle',
   components: {
-    quillEditor
+    // 注册局部组件
+    quillEditor,
+    channelSelect
   },
   data () {
     return {
@@ -59,13 +63,13 @@ export default {
         },
         channel_id: ''
       },
-      channels: [],
+      // channels: [],   因为封装到组件里了
       editorOption: ''
     }
   },
   // 生命周期第二步先加载这里边写的内容  然后在加载其他的
   created () {
-    this.loadChannels()
+    // this.loadChannels()
   },
   methods: {
     onSubmit (draft) {
@@ -74,9 +78,9 @@ export default {
         method: 'post',
         url: '/articles',
         // 请求头参数  文档需要
-        headers: {
-          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
-        },
+        // headers: {
+        //   Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        // },
         // query参数必须写到这个调用接口里面
         params: {
           draft
@@ -89,18 +93,18 @@ export default {
       }).catch(err => {
         console.log(err, '保存失败')
       })
-    },
-    loadChannels () {
-      // 调用频道接口
-      this.$axios({
-        method: 'GET',
-        url: '/channels'
-      }).then(res => {
-        this.channels = res.data.data.channels
-      }).catch(err => {
-        console.log(err, '获取数据失败')
-      })
     }
+    // loadChannels () {
+    //   // 调用频道接口
+    //   this.$axios({
+    //     method: 'GET',
+    //     url: '/channels'
+    //   }).then(res => {
+    //     this.channels = res.data.data.channels
+    //   }).catch(err => {
+    //     console.log(err, '获取数据失败')
+    //   })
+    // }
   }
 }
 </script>

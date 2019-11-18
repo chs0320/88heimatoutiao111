@@ -18,16 +18,17 @@
         </el-form-item>
         <el-form-item label="查询状态">
           <!-- 下拉列表会把选中的option的value值传到数据中 -->
-          <el-select placeholder="请选择" v-model="filterForm.channel_id">
-            <el-option label="所有频道" :value="null"></el-option>
+          <!-- <el-select placeholder="请选择"> -->
+            <!-- <el-option label="所有频道" :value="null"></el-option> -->
             <!-- value="null"  故意的  不传就是所有  默认的 -->
-            <el-option
+            <!-- <el-option
               :label="channel.name"
               :value="channel.id"
               v-for="channel in channels"
               :key="channel.id"
             ></el-option>
-          </el-select>
+          </el-select> -->
+          <channel-select v-model="filterForm.channel_id"></channel-select>
         </el-form-item>
         <el-form-item label="时间选择">
           <div class="block">
@@ -98,9 +99,13 @@
 </template>
 
 <script>
+import channelSelect from '@/components/channel-select'
 export default {
   // 建议给每个数组都起一个名字，有利于在网页的vue查找   建议有意义
   name: 'cc',
+  components: {
+    channelSelect
+  },
   data () {
     return {
       filterForm: {
@@ -161,7 +166,7 @@ export default {
       totalCount: 0,
       loading: true,
       page: 1, // 在data中添加数据成员存储当前页码
-      channels: [],
+      // channels: [],
       rangeDate: []
     }
   },
@@ -169,21 +174,21 @@ export default {
     // 建议不在这个里面写大量逻辑，所以就写在方法里，封装一个函数
     this.loadArticles()
     // 加载频道列表
-    this.loadChannels()
+    // this.loadChannels()
   },
   methods: {
     loadArticles (page = 1) {
       // 加载loading
       this.loading = true
       // 加载所有文章数据
-      const token = window.localStorage.getItem('user-token')
+      // const token = window.localStorage.getItem('user-token')
       this.$axios({
         method: 'get',
         url: '/articles',
-        headers: {
-          // 添加请求头
-          Authorization: `Bearer ${token}`
-        },
+        // headers: {
+        //   // 添加请求头
+        //   Authorization: `Bearer ${token}`
+        // },
         params: {
           page,
           per_page: 10,
@@ -231,20 +236,20 @@ export default {
       }).catch(err => {
         console.log(err, '删除失败')
       })
-    },
-    loadChannels () {
-      // 请求频道接口
-      this.$axios({
-        method: 'get',
-        url: '/channels'
-      }).then(res => {
-        // console.log(res)
-        this.channels = res.data.data.channels
-      })
-        .catch(err => {
-          console.log(err, '获取数据失败')
-        })
     }
+    // loadChannels () {
+    //   // 请求频道接口
+    //   this.$axios({
+    //     method: 'get',
+    //     url: '/channels'
+    //   }).then(res => {
+    //     // console.log(res)
+    //     this.channels = res.data.data.channels
+    //   })
+    //     .catch(err => {
+    //       console.log(err, '获取数据失败')
+    //     })
+    // }
 
     // onDelete () {
     //   // 请求删除

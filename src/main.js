@@ -27,3 +27,20 @@ axios.defaults.transformResponse = [function (data, headers) {
     return {}
   }
 }]
+// axios自带的请求拦截器和响应拦截器  这里用的请求拦截器
+// config是在请求拦截器中本次请求相关的配置对象，就是最后发给后端的配置对象
+axios.interceptors.request.use(function (config) {
+  // 我们可以在拦截器中对congig进行统一设置
+  console.log('请求拦截器', config)
+  const token = window.localStorage.getItem('user-token')
+  // 统一添加token
+  if (token) {
+    // 在axios中都会自动拼接成tostring
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  // return config  是通行规则
+  return config
+}, function (error) {
+  console.log(error)
+  return Promise.reject(error)
+})
