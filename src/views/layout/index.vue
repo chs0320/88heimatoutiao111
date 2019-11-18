@@ -20,7 +20,7 @@
           <el-menu-item-group>
             <el-menu-item index="/publish">发布文章</el-menu-item>
             <el-menu-item index="/article">内容列表</el-menu-item>
-            <el-menu-item>评论列表</el-menu-item>
+            <el-menu-item index="/comment">评论列表</el-menu-item>
             <el-menu-item>素材管理</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
