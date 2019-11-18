@@ -26,6 +26,7 @@
           width="180">
           <template slot-scope="scope">
          <el-switch
+            @change="onStatusChang(scope.row)"
             v-model="scope.row.comment_status"
             active-color="#13ce66"
             inactive-color="#ff4949">
@@ -64,7 +65,7 @@ export default {
   methods: {
     loadArticles () {
       this.$axios({
-        method: 'get',
+        method: 'GET',
         url: '/articles',
         params: {
           response_type: 'comment'
@@ -74,6 +75,26 @@ export default {
         this.articles = res.data.data.results
       }).catch(err => {
         console.log(err, '获取数据失败')
+      })
+    },
+    onStatusChang (article) {
+      this.$axios({
+        method: 'put',
+        url: '/comments/status',
+        params: {
+          article_id: article.id.toString()
+        },
+        data: {
+          allow_comment: article.comment_status
+        }
+      }).then(res => {
+        this.$message({
+          type: 'seccess',
+          message: `${article.comment_status ? '启用' : '关闭'} 成功`
+        })
+      }).catch(err => {
+        console.log(err)
+        this.$message.error('操作失败')
       })
     }
   }
