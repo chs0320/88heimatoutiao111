@@ -80,7 +80,9 @@
         <el-table-column prop="address" label="操作">
           <!-- slot-scope="scope"相当于v-for  后面传id就是通过每项的id删除 -->
           <template slot-scope="scope">
-            <el-button type="primary" round size="mini">编辑</el-button>
+            <!-- @click="$router.push('/publish/ + scope.row.id')"
+            当点击编辑的时候跳到下一个路由里面，当然这个路由跟他在同一级，携带着id过去的   这是动态创建 -->
+            <el-button type="primary" round size="mini" @click="$router.push('/publish/' + scope.row.id)">编辑</el-button>
             <el-button type="danger" round size="mini" @click="onDelete(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>

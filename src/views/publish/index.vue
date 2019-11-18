@@ -10,8 +10,7 @@
         </el-form-item>
         <el-form-item label="内容">
           <!-- <el-input type="textarea" v-model="article.content"></el-input> -->
-          <quill-editor v-model="article.content">
-          </quill-editor>
+          <quill-editor v-model="article.content"></quill-editor>
         </el-form-item>
         <el-form-item label="频道">
           <!-- <el-select v-model="article.channel_id" placeholder="请选择频道">
@@ -21,15 +20,15 @@
               v-for="channel in channels"
               :key="channel.id"
             ></el-option>
-          </el-select> -->
-            <channel-select v-model="article.channel_id"></channel-select>
+          </el-select>-->
+          <channel-select v-model="article.channel_id"></channel-select>
         </el-form-item>
         <!-- <el-form-item label="封面">
           <el-radio-group v-model="form.resource">
             <el-radio label="线上品牌商赞助"></el-radio>
             <el-radio label="线下场地免费"></el-radio>
           </el-radio-group>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item>
           <el-button type="primary" @click="onSubmit(false)">发表</el-button>
           <el-button @click="onSubmit(true)">存入草稿</el-button>
@@ -70,10 +69,22 @@ export default {
   // 生命周期第二步先加载这里边写的内容  然后在加载其他的
   created () {
     // this.loadChannels()
+    if (this.$route.params.articleId) {
+      this.loadArticle()
+    }
   },
   methods: {
     onSubmit (draft) {
-      // console.log('submit!')
+      if (this.$route.params.articleId) {
+        // 请求编辑文章
+        this.updateArticle(draft)
+      } else {
+        // 请求添加文章
+        this.addArticle(draft)
+      }
+    },
+    // console.log('submit!')
+    addArticle (draft) {
       this.$axios({
         method: 'post',
         url: '/articles',
@@ -92,6 +103,39 @@ export default {
         this.$router.push('/article')
       }).catch(err => {
         console.log(err, '保存失败')
+      })
+    },
+    updateArticle (draft) {
+      this.$axios({
+        method: 'put',
+        url: `/articles/${this.$route.params.articleId}`,
+        // 请求头参数  文档需要
+        // headers: {
+        //   Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        // },
+        // query参数必须写到这个调用接口里面
+        params: {
+          draft
+        },
+        // body参数
+        data: this.article
+      }).then(res => {
+        this.$message({
+          type: 'success',
+          message: '更新成功'
+        })
+      }).catch(err => {
+        console.log(err, '保存失败')
+        this.$message.error('更新失败')
+      })
+    },
+
+    loadArticle () {
+      this.$axios({
+        method: 'get',
+        url: `/articles/${this.$route.params.articleId}`
+      }).then(res => {
+        this.article = res.data.data
       })
     }
     // loadChannels () {

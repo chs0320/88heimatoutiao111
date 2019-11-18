@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import layout from '../views/layout/Home.vue'
+import layout from '../views/layout/index.vue'
 import login from '../views/login/login.vue'
 // @是在vue中提供的一个路径的方法，永远指向src
 import home from '@/views/home/index.vue'
@@ -28,6 +28,10 @@ const routes = [
       },
       {
         path: '/publish',
+        component: publish
+      },
+      {
+        path: '/publish/:articleId',
         component: publish
       }
     ]
