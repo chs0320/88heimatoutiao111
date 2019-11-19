@@ -9,6 +9,7 @@ import publish from '@/views/publish'
 import nprogress from 'nprogress'
 import comment from '@/views/comment'
 import commentDetail from '@/views/comment-detail'
+import media from '@/views/media'
 Vue.use(VueRouter)
 
 const routes = [
@@ -43,6 +44,10 @@ const routes = [
       {
         path: '/comment-detail/:articleId',
         component: commentDetail
+      },
+      {
+        path: '/media',
+        component: media
       }
     ]
   },

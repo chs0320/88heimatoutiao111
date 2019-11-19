@@ -97,6 +97,7 @@ export default {
       })
     },
     onTop (comment) {
+      console.log(comment)
       this.$axios({
         method: 'put',
         url: `/comments/${comment.com_id}/sticky`,
