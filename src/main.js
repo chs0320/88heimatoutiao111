@@ -8,14 +8,7 @@ import axios from 'axios'
 import '../node_modules/nprogress/nprogress.css'
 import JSONbig from 'json-bigint'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
-Vue.prototype.$axios = axios // 将axios共享给所有的实例使用    prototype原型属性     vue所有的属性都带$
-Vue.use(ElementUI) // 注册所有的组件，就用vue.use
-Vue.config.productionTip = false
 
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
 // 这个不能用箭头函数吧
 axios.defaults.transformResponse = [function (data, headers) {
   try {
@@ -44,3 +37,14 @@ axios.interceptors.request.use(function (config) {
   console.log(error)
   return Promise.reject(error)
 })
+
+// 对 axios 的配置一定要在添加到原型之前
+Vue.prototype.$axios = axios // 将axios共享给所有的实例使用    prototype原型属性     vue所有的属性都带$
+
+Vue.use(ElementUI) // 注册所有的组件，就用vue.use
+Vue.config.productionTip = false
+
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app')

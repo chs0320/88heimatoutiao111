@@ -118,28 +118,6 @@ export default {
       },
       // 因为时间现在只能绑一个，所以(必须)就创建了一个新的
       rangDate: [],
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-      ],
       // 因为打印出来的是一个数组，所以先定义一个空数组   存储文章数据库列表
       articles: [],
       articleStatus: [
@@ -192,6 +170,10 @@ export default {
         //   Authorization: `Bearer ${token}`
         // },
         params: {
+          // 左边的 page 是传递给后台的数据名称
+          // 右边的 page 是一个形参变量
+          // page: page,
+          // ES6 简写之后
           page,
           per_page: 10,
           status: this.filterForm.status, // 文章状态

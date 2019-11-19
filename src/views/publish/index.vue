@@ -62,8 +62,8 @@ export default {
         },
         channel_id: ''
       },
-      // channels: [],   因为封装到组件里了
       editorOption: ''
+      // channels: [],   因为封装到组件里了
     }
   },
   // 生命周期第二步先加载这里边写的内容  然后在加载其他的
