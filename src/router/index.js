@@ -10,6 +10,7 @@ import nprogress from 'nprogress'
 import comment from '@/views/comment'
 import commentDetail from '@/views/comment-detail'
 import media from '@/views/media'
+import account from '@/views/account'
 Vue.use(VueRouter)
 
 const routes = [
@@ -48,6 +49,10 @@ const routes = [
       {
         path: '/media',
         component: media
+      },
+      {
+        path: '/account',
+        component: account
       }
     ]
   },
