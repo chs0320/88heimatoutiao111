@@ -53,8 +53,29 @@ export default {
     this.loadUserProfile()
   },
   methods: {
-    onSubmit (cc) {
-      console.log(cc)
+    onSubmit () {
+      const { name, email, intro } = this.user
+      // console.log(cc)
+      this.$axios({
+        method: 'PATCH',
+        url: '/user/profile',
+        data () {
+          return {
+            user: {
+              name,
+              email,
+              intro
+            }
+          }
+        }
+      }).then(res => {
+        this.$message({
+          type: 'success',
+          message: '修改成功'
+        })
+      }).catch(err => {
+        console.log(err, '修改失败')
+      })
     },
     loadUserProfile () {
       this.$axios({
