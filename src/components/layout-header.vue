@@ -11,9 +11,9 @@
     </el-col>
     <el-col :span="3" class="right">
       <!-- 右侧 -->
-      <img src="../assets/img/avatar.jpg" alt />
+      <img width="50" :src="user.photo" alt />
       <el-dropdown trigger="click">
-        <span style="cursor: pointer;">早晚</span>
+        <span style="cursor: pointer;">{{user.name}}</span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>个人信息</el-dropdown-item>
           <el-dropdown-item>git地址</el-dropdown-item>
@@ -26,8 +26,36 @@
 </template>
 
 <script>
+import eventBus from '@/utils/event-bus'
 export default {
+  data () {
+    return {
+      user: {
+        name: '',
+        photo: ''
+      }
+    }
+  },
+  created () {
+    this.loadUser()
+    eventBus.$on('update-user', user => {
+      this.user.name = user.name
+      this.user.photo = user.photo
+    })
+  },
   methods: {
+    loadUser () {
+      this.$axios({
+        method: 'GET',
+        url: '/user/profile'
+      }).then(res => {
+        console.log(res)
+        this.user = res.data.data
+      }).catch(err => {
+        console.log(err, '获取数据失败')
+        this.$message.error('失败')
+      })
+    },
     onlogout () {
       // console.log(123)
       this.$confirm('你确定要退出么?', '提示', {
