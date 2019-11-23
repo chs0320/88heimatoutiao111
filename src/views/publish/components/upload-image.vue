@@ -34,7 +34,16 @@
             </el-col>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="上传图片" name="second">上传图片</el-tab-pane>
+        <el-tab-pane label="上传图片" name="second">
+          <el-upload
+            action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+            :headers="uploadHeaders"
+            name="image"
+            list-type="picture-card"
+            :on-preview="onPreview">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-tab-pane>
       </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
@@ -54,13 +63,17 @@ export default {
     }
   },
   data () {
+    const token = window.localStorage.getItem('user-token')
     return {
       centerDialogVisible: false, // 对话框的显示状态
       activeName: 'first', // 激活的标签页
       activeImage: 'all', // 激活图片的筛选
       images: [], //
       activeIndex: null, // 激活的图片的索引
-      previewImage: '' //  预览的图片地址
+      previewImage: '', //  预览的图片地址
+      uploadHeaders: {
+        Authorization: `Bearer ${token}`
+      }
     }
   },
   computed: {},
@@ -89,13 +102,23 @@ export default {
       })
     },
     onConfirm () {
-      const image = this.images[this.activeIndex]
       // alert(222)
-      if (image) {
-        // this.previewImage = image.url
-        this.$emit('input', image.url)
+      if (this.activeName === 'first') {
+        const image = this.images[this.activeIndex]
+        if (image) {
+          // this.previewImage = image.url
+          this.$emit('input', image.url)
+        }
+      } else if (this.activeName === 'second') {
+        const previewImage = this.previewImage
+        if (previewImage) {
+          this.$emit('input', previewImage)
+        }
       }
       this.centerDialogVisible = false
+    },
+    onPreview (file) {
+      this.previewImage = file.response.data.url
     }
   }
 }
