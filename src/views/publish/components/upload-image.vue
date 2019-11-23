@@ -27,7 +27,10 @@
           <el-row :gutter="20">
             <el-col :class="{
               'img-item': index === activeIndex
-            }" :span="6" v-for="(item,index) in images" :key="item.id"
+            }"
+            :span="6"
+            v-for="(item,index) in images"
+            :key="item.id"
             @click.native="activeIndex = index"
             >
               <img height="100" :src="item.url">
@@ -102,19 +105,23 @@ export default {
       })
     },
     onConfirm () {
-      // alert(222)
       if (this.activeName === 'first') {
+        // 当前是素材库
         const image = this.images[this.activeIndex]
         if (image) {
+          // 将选中的图片路径赋值给 previewImage
           // this.previewImage = image.url
+          // 将所选图片的路径同步给父组件绑定的数据
           this.$emit('input', image.url)
         }
       } else if (this.activeName === 'second') {
+        // 当前是上传图片
         const previewImage = this.previewImage
         if (previewImage) {
           this.$emit('input', previewImage)
         }
       }
+      // 关闭对话框
       this.centerDialogVisible = false
     },
     onPreview (file) {
