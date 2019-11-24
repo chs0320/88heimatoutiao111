@@ -104,6 +104,10 @@ export default {
         console.log(err)
       })
     },
+    onPreview (file) {
+      console.log(file)
+      this.previewImage = file.response.data.url
+    },
     onConfirm () {
       if (this.activeName === 'first') {
         // 当前是素材库
@@ -117,15 +121,13 @@ export default {
       } else if (this.activeName === 'second') {
         // 当前是上传图片
         const previewImage = this.previewImage
+        console.log(previewImage)
         if (previewImage) {
           this.$emit('input', previewImage)
         }
       }
       // 关闭对话框
       this.centerDialogVisible = false
-    },
-    onPreview (file) {
-      this.previewImage = file.response.data.url
     }
   }
 }
@@ -159,6 +161,6 @@ export default {
   display: block;
 }
 .img-item {
-  border: 1px solid #000;
+  border: 1px solid pink;
 }
 </style>
