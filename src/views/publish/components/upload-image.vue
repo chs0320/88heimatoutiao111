@@ -123,7 +123,13 @@ export default {
         const previewImage = this.previewImage
         console.log(previewImage)
         if (previewImage) {
+          // this.$emit 都是在给父组件发布自定义事件
+          // 只有父组件才能监听接收
           this.$emit('input', previewImage)
+
+          // 通过 event-bus 通信
+          //    任何组件中 $on
+          //    任何组件  $emit
         }
       }
       // 关闭对话框
